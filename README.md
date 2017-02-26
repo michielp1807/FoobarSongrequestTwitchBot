@@ -84,8 +84,10 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
   h.	It now should be working, go to the twitch channel you added the bot to and write *!ping* in chat, it should respond with *pong!*, you can also see the chat in the twitchbot window
   
-####  6. Known problems
+####  6. Trouble shooting
   
   a.	If it’s adding the wrong song to the queue, make sure you’ve got the correct playlist active when you launch the bot, try restarting the bot
   
   b.	If it’s not adding any song at all please first try to restart the bot, if it still doesn’t work ask for help
+
+If you have any other problems please 
