@@ -90,4 +90,5 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
   b.	If it’s not adding any song at all please first try to restart the bot, if it still doesn’t work ask for help
 
-If you have any other problems please 
+If you have any other problems please make an issue at: https://github.com/MichielP1807/FoobarSongrequestTwitchBot/issues/new
+Or tweet me @MichielP1807
