@@ -72,11 +72,11 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
   b.	Open twitchbot.js in a text editor (notepad, atom, notepad++ etc.)
   
-  c.	Put the username of your twitchbot account you’ve created in between the quotation marks after the *var TwitchbotUsername = *
+  c.	Put the username of your twitchbot account you’ve created in between the quotation marks after the *var TwitchbotUsername =*
   
-  d.	Put your oauth code in between the quotation marks after *var TwitchbotPassword = *
+  d.	Put your oauth code in between the quotation marks after *var TwitchbotPassword =*
   
-  e.	Put the channel name of the channel you would like your bot to join in between the quotation marks after *var TwitchbotJoinChannel = *
+  e.	Put the channel name of the channel you would like your bot to join in between the quotation marks after *var TwitchbotJoinChannel =*
   
   f.	Save the file and close the text editor
   
