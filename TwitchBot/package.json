@@ -1,0 +1,14 @@
+{
+  "name": "songrequesttwitchbot",
+  "version": "1.0.0",
+  "description": "a twitchbot that does foobar songrequests",
+  "main": "twitchbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "MichielP1807",
+  "license": "ISC",
+  "dependencies": {
+    "tmi.js": "^1.1.2"
+  }
+}

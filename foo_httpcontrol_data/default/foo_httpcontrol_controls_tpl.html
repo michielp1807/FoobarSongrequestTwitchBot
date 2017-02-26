@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>[HELPER2X]foobar2000</title>
+<link rel="shortcut Icon" href="/default/favicon.ico" type="image/x-icon" />
+<script language="JavaScript" type="text/javascript">
+<!--
+var mouseX = 0;
+var p_key = 0;
+var act = 0;
+
+function KeyPress(e) { 
+	p_key = e; 
+	if (p_key == 16) // shift -- focus
+		act = 3;
+	else if (p_key == 17) // ctrl -- remove
+		act = 4;
+	else if (p_key == 81) // q -- enqueue
+		act = 1;
+	else if (p_key == 87) // w -- dequeue
+		act = 2;
+	else
+		act = 0;
+	document.getElementById('Actions').selectedIndex = act;
+}
+
+function pad(str, chr, count) {
+	var str_out = str.toString();
+	while (str_out.length < count)
+		str_out = chr + str_out;
+	return str_out;
+}
+
+function pc(c, p) {
+	var com = c || ''; var par = p || '';
+	with (document.cmd_form)
+	{
+		cmd.value = com;
+		param1.value = par;
+		submit();
+	}
+}
+
+function format_time(time) {
+	mins = Math.floor(time / 60);
+	secs = pad(time % 60, '0', 2);
+	return mins+":"+secs;
+}
+
+function set_t_pos(time) { 
+	var str = format_time(time) + " / ";
+	document.getElementById("t_time").innerHTML = str + ( [ITEM_PLAYING_LEN] > 0 ? format_time([ITEM_PLAYING_LEN]) : '?' );
+}
+
+function set_np_width(t_sec, t_length) {
+	var np_width = document.getElementById("npd").offsetWidth;
+	np_width = np_width < 100 ? 100: np_width;
+	document.getElementById('np').style.width=Math.floor(np_width * t_sec / t_length) + "px";
+}
+
+function t_playback_timer(t_sec, t_length) {
+	if (t_sec <= t_length && t_length != 0)
+	{
+		set_t_pos(t_sec);
+		if (t_length != 0)
+			set_np_width(t_sec, t_length);
+		setTimeout('t_playback_timer('+(t_sec+1)+','+t_length+')',1000);
+	}
+}
+
+function a(track) { // do a(ction) on clicked entry
+	if (act == 0)		pc('Start', track);
+	else if (act == 1)	pc('QueueItems', track);
+	else if (act == 2)	pc('DequeueItems', track);
+	else if (act == 3)	pc('SetFocus', track);
+	else if (act == 4)	pc('Del', track);
+}
+
+function np_onclick() {
+	with (document)
+		pc('Seek', Math.round((mouseX-getElementById("np").offsetLeft)*100 / (getElementById("npd").offsetWidth)) );
+}
+
+function mouse_capture_init() {
+	if (document.layers? true : false)
+		captureEvents(Event.MOUSEMOVE)
+	document.onmousemove = handleMouseMove;
+}
+
+function handleMouseMove(evt) {
+	if (evt)
+		mouseX=evt.clientX;
+	else
+	if (event)
+	    mouseX=event.x;	
+	return false;
+}
+
+function fit() {
+	with (document.getElementById('playlist'))
+	{
+		style.position = 'static'; // important for the onresize event
+		style.overflowY = 'auto';
+		style.top = offsetTop + 'px';
+		style.left = offsetLeft + 'px';
+		style.right = offsetLeft + 'px';
+		style.bottom = '8px'; // fit this to your taste
+		style.position = 'fixed';
+
+		var npelem = document.getElementById("nowplaying");
+		if (npelem)
+		{
+			scrolltop = npelem.offsetTop - offsetHeight/2;
+
+			if (scrolltop > 0)
+				scrollTop = scrolltop;
+		}
+	}
+}
+
+document.onkeydown = function(evt) { KeyPress(evt?evt.keyCode:event.keyCode); }
+//--></script><style type="text/css">
+<!--
+body { background-color:#ffffff; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:10px; }
+input { width:30px; background-color:#F0F0F0; color:#000000; margin: 0; border: 1px solid #B0B0B0; padding: 1; }
+select { background-color:#F0F0F0; color:#000000; border: 1px solid  #B0B0B0; padding: 1;}
+.sac { background-color:#ffffff; margin-right: 0px; width:auto; height: auto;}
+.frm { margin: 0px; padding: 0px; }
+table td { font-family:Verdana, Arial, Helvetica, sans-serif; font-size:10px; padding: 3px;}
+tr.npr td { background-color: #eaeaea; border-top: 1px solid #eaeaea; }
+.playlist_time { border-top: 1px solid #000000; text-align: right; }
+/* playlist entries highlight */
+tr.o td { background-color: #fafafa; }     /* o(dd) */
+tr.e td { background-color: #ffffff; }     /* e(ven) */
+tr.prev td { border: 1px solid #bbbbbb;}   /* prev(iously played) */
+tr.focus td { border: 1px solid #000000; } /* focus(ed) */
+tr.queue td { background-color: #e1eaff; } /* queue(d) #ecebff */ 
+td.t { text-align: right; }                /* t(otal time) */
+td.q { text-align: right; }                /* q(ueue order) */
+/* now playing line */
+.npc { position:absolute; left:auto; width:0px; top:auto; margin-top: -5px; opacity:.50; background-color: #aaaaaa; z-index: -1; }
+.track { padding: 5px; font-size: 12px;}
+a, a.current, a.current:hover { color: #333333; }
+a:hover { text-decoration: underline; color: #d00000; }
+form { margin-top: 15px; }
+-->
+</style></head><body onload="mouse_capture_init(); fit();" onresize="fit();">
+<form action="/default/" method="get" name="cmd_form" target="_self" class="frm">
+<div>
+<span style="float: right; margin-bottom: 8px;"><a href="javascript:pc();"><img src="[ALBUMART]" width="180px"></a></span>
+<input name="Stop" title="Stop playback" type="button" value="#" onclick="pc(this.name);">
+<input name="PlayOrPause" title="Pause/resume playback" type="button" value="||" onclick="pc(this.name);">
+<input name="Start" title="Start playback" type="button" value="|>" onclick="pc(this.name);">
+<input name="StartPrevious"  title="Play previous track" type="button" value="||<" onclick="pc(this.name);">
+<input name="StartNext" title="Play next track" type="button" value=">||" onclick="pc(this.name);">
+<input name="StartRandom" title="Play random track" type="button" value="|>?" onclick="pc(this.name);">
+<select title="Playback order" onchange="pc('PlaybackOrder',this.value);">[PLAYBACK_ORDER_OPTION]</select>
+<select title="Volume level" onchange="pc('Volume',this.value);">[VOLUME_OPTION]</select>%
+<p>
+<input title="Stop after current" type="checkbox" class="sac" [SAC] onclick="pc('SAC',this.checked?'1':'0');"><span style="font-size: 12px">SAC</span>
+<input title="Stop after queue" type="checkbox" class="sac" [SAQ] onclick="pc('SAQ',this.checked?'1':'0');"><span style="font-size: 12px">SAQ</span>
+<input name="QueueAlbum" title="Queue album" type="button" value="QA" onclick="pc(this.name);">
+<input name="QueueRandomItems" title="Queue random items" type="button" value="QR" onclick="n = prompt('How many items to queue?'); a = n != null? pc(this.name, n) : false;">
+<select title="Playlist actions" id="Actions" style="background-color: #eeeeee;" onchange="act=this.selectedIndex;"><option>Start</option><option>Enqueue</option><option>Dequeue</option><option>Focus</option><option>Delete</option></select>
+<input name="EmptyPlaylist" title="Empty playlist" type="button" value="&#8212;" onclick="if (confirm('Empty active playlist?')) pc(this.name); else return false;">
+<select title="Playlists" onchange="pc('SwitchPlaylist',this.value);">[PLAYLISTS_OPTION]</select>
+<a href="/default/?cmd=Browse">[&nbsp;...&nbsp;]</a>
+</p>
+<p><input type="text" size="9" style="width: auto" onkeypress="document.cmd_form.cmd.value='SearchMediaLibrary'; document.cmd_form.param1.value=this.value;" value="[SEARCH_REQUEST]">
+<input name="QueryRetrace" title="Retrace/init query" type="button" value=" < " onclick="pc(this.name);">
+<select title="Media library query" id="QueryAdvance" onchange="pc('QueryAdvance',this.value);">[QUERY_OPTION]</select>&nbsp;[QUERY_INFO]</p>
+<br><p id="npstr"><span id="npd" style="white-space: nowrap;" onclick="np_onclick();"><span id="np" class="npc">&nbsp;</span><span id="track_title" class="track">[HELPER1X]</span>&nbsp;<span id="t_time" class="track"></span></span>&nbsp;&nbsp;</p>
+<p><span id="status"></span>&nbsp;<font size="-2" color="#ababab">[HELPER3X]</font></p>
+</div>
+<input name="cmd" type="hidden" value=""><input name="param1" type="hidden" value="">
+<script language="JavaScript" type="text/javascript">
+<!--
+with (document)
+{
+	act = [LAST_ACTION];
+	getElementById('Actions').selectedIndex = act;
+    var i_p;
+    if ('[PLAYLIST_ITEM_PLAYING]' != '?')
+      i_p = parseInt('[PLAYLIST_ITEM_PLAYING]') + 1;
+    else
+      i_p = '?';
+
+if ([IS_PLAYING]) { // start progressbar if playing
+	t_playback_timer([ITEM_PLAYING_POS],[ITEM_PLAYING_LEN]);
+
+    if (([ITEM_PLAYING_LEN]>0) && ([ITEM_PLAYING_POS] < [ITEM_PLAYING_LEN]) )
+        setTimeout('pc()',([ITEM_PLAYING_LEN]-[ITEM_PLAYING_POS])*1000 + 500);
+    else
+    if (([ITEM_PLAYING_POS] > [ITEM_PLAYING_LEN]) )
+        setTimeout('pc("RefreshPlayingInfo")',15000);
+    else
+    if ('[ITEM_PLAYING_LEN]' == '[ITEM_PLAYING_POS]' && '[ITEM_PLAYING_LEN]' != '?' && '[ITEM_PLAYING_LEN]' != '0')
+        setTimeout('pc()',500);
+      
+	getElementById('status').innerHTML = '[ Playing ' + i_p +  ' / [PLAYLIST_PLAYING_ITEMS_COUNT] ]';
+}
+else if ([IS_PAUSED]) { // adjust progressbar width if paused
+	set_np_width([ITEM_PLAYING_POS], [ITEM_PLAYING_LEN]);
+	set_t_pos([ITEM_PLAYING_POS]);
+	getElementById('status').innerHTML = '[ Paused ' + i_p + ' / [PLAYLIST_PLAYING_ITEMS_COUNT] ]';
+} else { // hide unnecessary track info if stopped
+	counter = getElementById("counter");
+	if (counter)
+		counter.innerHTML = "";
+	getElementById("status").innerHTML = "[ Stopped ]";
+	getElementById("npstr").style.visibility = "hidden";
+}
+
+if ([IS_ENQUEUEING] ) {
+	getElementById('status').innerHTML = '[ Enqueuement in progress ] ' + getElementById('status').innerHTML;
+	setTimeout('pc()',5000);
+}
+
+track = getElementById("track_title");
+
+if (track && track.innerHTML == '' && ([IS_PLAYING] || [IS_PAUSED]) ) // if playing but track info is not loaded yet, reload page
+	setTimeout('pc()',500);
+
+npp = getElementById("np");	// adjust progressbar width and height, and opacity hack for IE6
+if (npp)
+with (npp.style) {
+	if (getElementById("np").offsetHeight >= 2 )
+		height=getElementById("np").offsetHeight*2-2+"px";
+	left=getElementById("npd").offsetLeft+"px";
+	filter = "alpha(opacity=50)";
+}
+}
+//--></script>
+<p>[PLAYLIST_PAGES]</p>
+<div id="playlist" style="border-top: 1px solid #b0b0b0; clear: both; z-index: +1; ">
+<table id="pl">
+[PLAYLIST]
+<tr><td id="totals"></td><td class="playlist_time">[PLAYLIST_TOTAL_TIME]</td><td class="playlist_time">[QUEUE_TOTAL_TIME]</td></tr>
+</table>
+</div>
+<!--[PGT]s-->
+</body>
+</html>

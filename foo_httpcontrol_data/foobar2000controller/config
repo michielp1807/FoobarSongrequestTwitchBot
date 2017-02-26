@@ -1,0 +1,18 @@
+; "new" configuration file
+; 
+; check readme.txt for usage details
+;
+[foo_httpcontrol]
+url=/index.html
+playlist_row={"artist": "$replace(%artist%,\,\\,",\")", "album": "$replace(%album%,\,\\,",\")", "track": "$replace(%title%,\,\\,",\")", "len": "%length%", "rating": "%rating%", "queued":"$if(%queue_indexes%,'('%queue_indexes%') ',)","playCount": "%play_count%"}
+helper1=[%rating%]
+helper2=[$replace(%artist%,\,\\,",\") - $replace(%title%,\,\\,",\") - $replace(%album%,\,\\,",\")]
+helper3=[%codec% | %bitrate%kbps | %samplerate%Hz |[ %__bitspersample%-bit |] %channels%]
+
+
+albumart=$directory_path(%path%)\Cover.jpg|$directory_path(%path%)\Cover.png|$directory_path(%path%)\%artist%*-*%album%*front*.*|$directory_path(%path%)\%artist% - %album%*.jpg|$directory_path(%path%)\%artist% - %album%*.png|$directory_path(%path%)\%artist%*.jpg|$directory_path(%path%)\%artist%*.png|$directory_path(%path%)\$if(not(%album%),%artist%*,%album%*.jpg)|$directory_path(%path%)\$if(not(%album%),%artist%*,%album%*.png)|$directory_path(%path%)\*front*.jpg|$directory_path(%path%)\*front*.png|$directory_path(%path%)\*.jpg|$directory_path(%path%)\*.png
+albumart_not_found=foobar2000controller/img/nocover.png
+albumart_not_available=foobar2000controller/img/nocover.png
+albumart_prefer_embedded=1
+albumart_limit_size=15728640
+playlist_items_per_page=60
