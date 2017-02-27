@@ -51,13 +51,13 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 4.	Go to http://127.0.0.1:8888/ in your browser to make sure it’s installed
   
-5.	Unzip http control playlistviewer
+6.	Open up appdata (press the windows key and R, type in %appdata% and press ok)
   
-6.	Open up appdata by pressing the windows key and R and type in %appdata% and press ok
+7.	Navigate to *C:\Users\UserNameHere\AppData\Roaming\foobar2000\*
+
+8.  Move the foo_httpcontrol_data folder to that foobar2000 folder
   
-7.	Move playlistviewer to *C:\Users\UserNameHere\AppData\Roaming\foobar2000\foo_httpcontrol_data\*
-  
-8.	Go to http://127.0.0.1:8888/playlistviewer/ in your browser, you should see your playlist here
+9.	Go to http://127.0.0.1:8888/playlistviewer/ in your browser, you should see your playlist here
   
 ####  3. Setting up node.js
   
@@ -87,7 +87,9 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 ####  5. Setting up the twitchbot
   
-1.	Unzip the twitchbot
+1.	Open the TwitchBot folder you've downloaded
+  
+#### TO BE UPDATED TO JSON FORMAT
   
 2.	Open twitchbot.js in a text editor (notepad, atom, notepad++ etc.)
   
@@ -102,6 +104,8 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
 7.	Run twitchbot-starter.bat, it should be showing some of the songs in your playlist
   
 8.	It now should be working, go to the twitch channel you added the bot to and write *!ping* in chat, it should respond with *pong!*, you can also see the chat in the twitchbot window
+
+9.  Try requesting a song from your playlist, it now should be working
   
 ####  6. Trouble shooting
   
