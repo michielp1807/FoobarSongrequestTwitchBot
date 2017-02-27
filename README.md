@@ -9,9 +9,9 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 * foo_httpcontrol (link at release)
   
-* The httpcontrol data from here
+* The foo_httpcontrol_data folder from here
   
-* The Twitchbot code from here
+* The TwitchBot folder from here
 
 ##Commands:
 
