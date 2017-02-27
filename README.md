@@ -59,7 +59,7 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 3.	Type node and hit enter
   
-4.	> Now in javascript land
+4.	You're now in javascript land!
   
 ####  4. Setting up twitch account for the bot
   
