@@ -3,15 +3,13 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
 
 ##Needed for this bot:
 
-* foobar2000
+* [foobar2000](http://www.foobar2000.org/download "Download foobar2000")
 
-* node.js
+* [node.js](https://nodejs.org/ "Download node.js")
   
-* foo_httpcontrol (link at release)
+* [foo_httpcontrol](https://www.dropbox.com/s/uglqfqwbtzl7xio/foobarCon_0.97.28-fc.exe?dl=1 "Download foo_httpcontrol")
   
-* The foo_httpcontrol_data folder from here
-  
-* The TwitchBot folder from here
+* [The two folders in this repository](https://github.com/MichielP1807/FoobarSongrequestTwitchBot/archive/master.zip "Download this repository")
 
 ##Commands:
 
@@ -22,6 +20,8 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
 * !previoussong - bot will post the artist and title of the previous song in chat
 
 * !queuelength - bot will post the length of the playback queue in chat
+
+* !ping - bot responds with pong! to verify it is working
 
 ##Features:
 
@@ -57,17 +57,16 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
 
 8.  Move the foo_httpcontrol_data folder to that foobar2000 folder
   
-9.	Go to http://127.0.0.1:8888/playlistviewer/ in your browser, you should see your playlist here
+9.	Go to http://127.0.0.1:8888/playlistviewer/ in your browser, see the name of the currently playing song there
   
 ####  3. Setting up node.js
   
 1.	Install node.js
   
-2.	Open cmd
-  
-3.	Type node and hit enter
-  
-4.	You're now in javascript land!
+2.	To test if node.js is installed correctly:
+    1. Open cmd
+    2. Type node and hit enter
+    3. You're now in javascript land!
   
 ####  4. Setting up twitch account for the bot
   
@@ -89,23 +88,23 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 1.	Open the TwitchBot folder you've downloaded
   
-#### TO BE UPDATED TO JSON FORMAT
+2.	Open twitchbot-data.json in a text editor (notepad, atom, notepad++ etc.)
   
-2.	Open twitchbot.js in a text editor (notepad, atom, notepad++ etc.)
+3.	Put the username of your twitchbot account you’ve created in between the quotation marks after the *"username": *
   
-3.	Put the username of your twitchbot account you’ve created in between the quotation marks after the *var TwitchbotUsername =*
+4.	Put your oauth code in between the quotation marks after *"password":*
   
-4.	Put your oauth code in between the quotation marks after *var TwitchbotPassword =*
-  
-5.	Put the channel name of the channel you would like your bot to join in between the quotation marks after *var TwitchbotJoinChannel =*
-  
-6.	Save the file and close the text editor
-  
-7.	Run twitchbot-starter.bat, it should be showing some of the songs in your playlist
-  
-8.	It now should be working, go to the twitch channel you added the bot to and write *!ping* in chat, it should respond with *pong!*, you can also see the chat in the twitchbot window
+5.	Put the channel name of the channel you would like your bot to join in between the quotation marks after *"joinChannel":*
 
-9.  Try requesting a song from your playlist, it now should be working
+6.  You can also change the cooldown time for either songs or users, these values are in seconds
+
+7.	Save the file and close the text editor
+  
+8.	Run twitchbot-starter.bat, it should be showing some of the songs in your playlist
+  
+9.	It now should be working, go to the twitch channel you added the bot to and write *!ping* in chat, it should respond with *pong!*, you can also see the chat in the twitchbot window
+
+10.  Try requesting a song from your playlist, it now should be working
   
 ####  6. Trouble shooting
   
