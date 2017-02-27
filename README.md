@@ -49,13 +49,15 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 3.	Allow Foobar2000 access to the internet
   
-4.	Go to http://127.0.0.1:8888/ in your browser to make sure it’s installed
+4.	Go to http://127.0.0.1:8888/ in your browser to make sure it’s installed, you should see some installed templates, we'll now install some more
+ 
+5.  Copy the foo_httpcontrol_data from this repository
   
 6.	Open up appdata (press the windows key and R, type in %appdata% and press ok)
   
 7.	Navigate to *C:\Users\UserNameHere\AppData\Roaming\foobar2000\*
 
-8.  Move the foo_httpcontrol_data folder to that foobar2000 folder
+8.  Paste the foo_httpcontrol_data folder here
   
 9.	Go to http://127.0.0.1:8888/playlistviewer/ in your browser, see the name of the currently playing song there
   
@@ -86,7 +88,7 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 ####  5. Setting up the twitchbot
   
-1.	Open the TwitchBot folder you've downloaded
+1.	Open the TwitchBot folder from this repository
   
 2.	Open twitchbot-data.json in a text editor (notepad, atom, notepad++ etc.)
   
