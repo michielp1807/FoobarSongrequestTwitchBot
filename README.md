@@ -21,6 +21,12 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
 
 * !previoussong - bot will post the artist and title of the previous song in chat
 
+##Features:
+
+* Cooldowns for songs and for users
+
+* Save requests that aren't in your playlist to a text file
+
 ##How to setup: 
 
 ####  1. Setting up foobar2000
