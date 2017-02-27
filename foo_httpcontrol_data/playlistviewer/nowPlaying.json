@@ -1,0 +1,6 @@
+{
+	"artist":"[HELPER2]",
+	"title":"[HELPER3]",
+	"isPlaying":"[IS_PLAYING]",
+	"queueLength":"[QUEUE_TOTAL_TIME]"
+}
