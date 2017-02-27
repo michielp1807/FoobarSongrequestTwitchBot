@@ -1,0 +1,7 @@
+{
+	"username":"YOUR_BOT_NAME_HERE",
+	"password":"oauth:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+	"joinChannel":"CHANNEL_NAME_TO_GO_TO",
+	"songCooldown":"600",
+	"userCooldown":"30"
+}
