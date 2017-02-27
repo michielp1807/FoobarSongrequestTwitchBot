@@ -13,7 +13,15 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 * The Twitchbot code from here
 
-##How to use: 
+##Commands:
+
+* !songrequest [search query] - request songs from the Foobar2000 playlist
+
+* !currentsong - bot will post the artist and title of the currently playing song in chat
+
+* !previoussong - bot will post the artist and title of the previous song in chat
+
+##How to setup: 
 
 ####  1. Setting up foobar2000
   
