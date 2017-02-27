@@ -4,12 +4,12 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
 ##Needed for this bot:
 
 * foobar2000
+
+* node.js
   
 * foo_httpcontrol (link at release)
   
 * The httpcontrol data from here
-  
-* node.js
   
 * The Twitchbot code from here
 
