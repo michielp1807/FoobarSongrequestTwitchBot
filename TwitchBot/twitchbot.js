@@ -35,6 +35,7 @@ checkNowPlaying();
 songPrevious = songCurrent;
 var songs = [];
 var playlistFromHttp;
+var http = require('http');
 var request = require("request");
 request({
     url: "http://127.0.0.1:8888/playlistviewer/?param3=playlist.json",
