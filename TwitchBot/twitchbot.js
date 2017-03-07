@@ -1,6 +1,6 @@
 // Foobar Songrequests Twitch Bot by MichielP1807
 
-var TwitchbotUsername = "YOUR_BOT_NAME_HERE"; // these values will be automatically set from the JSON file
+var TwitchbotUsername = "YOUR_BOT_NAME_HERE";
 var TwitchbotPassword = "oauth:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 var TwitchbotJoinChannel = "CHANNEL_NAME_TO_GO_TO";
 var SongCooldown = 600;
@@ -12,6 +12,7 @@ var userIsInCoolDown = {};
 console.log(" > Running Server");
 console.log(' ');
 
+var http = require('http');
 console.log(" > Loading User Data");
 console.log(' ');
 const fs = require('fs');
@@ -35,7 +36,6 @@ checkNowPlaying();
 songPrevious = songCurrent;
 var songs = [];
 var playlistFromHttp;
-var http = require('http');
 var request = require("request");
 request({
     url: "http://127.0.0.1:8888/playlistviewer/?param3=playlist.json",
@@ -76,12 +76,12 @@ setTimeout(function(){
 	client.on("chat", function(channel, user, message, self) { // on message
 		var username = user["display-name"];
 		message = message.toLowerCase();
-	
+		
 		// COMMAND: !ping
 		if (message.indexOf("!ping")==0) {
 			client.say(channel, "pong!");
 		// COMMAND: !currentsong
-		} else if (message.indexOf("!currentsong")==0 || message.indexOf("!currenttrack")==0 || message.indexOf("!nowPlaying")==0) {
+		} else if (message.indexOf("!currentsong")==0 || message.indexOf("!currenttrack")==0 || message.indexOf("!nowplaying") || message.indexOf("!song")==0) {
 			request({
 				url: "http://127.0.0.1:8888/playlistviewer/?param3=nowPlaying.json",
 				json: true
@@ -116,8 +116,9 @@ setTimeout(function(){
 				}
 			})
 		// COMMAND: !songrequest
-		} else if (message.indexOf("!songrequest")==0) {
-			var songWord = message.substring(13).split(" ");;
+		} else if (message.indexOf("!songrequest")==0 || message.indexOf("!sq")==0) {
+			var songWord = message.split(" ");;
+			songWord.shift(); // remove the command name
 			var songPossible = [];
 			var songIndex = -1;
 			if (songWord.length == 0 || message.substring(13) == false || message.substring(13)=="***" || message.indexOf("!songrequest ")!=0) {
@@ -153,10 +154,12 @@ setTimeout(function(){
 					} else if (userIsInCoolDown[username.toLowerCase()] === true) {
 						client.say(channel, 'You can only request a song every ' + UserCooldown + ' seconds ... FeelsBadMan');
 					} else {
-						songIsInCoolDown[songIndex] = true;
-						userIsInCoolDown[username.toLowerCase()] = true;
-						setTimeout(resetSongCoolDown,SongCooldown*1000,songIndex);
-						setTimeout(resetUserCoolDown,UserCooldown*1000,username);
+						if (username.toLowerCase != channel) {
+							songIsInCoolDown[songIndex] = true;
+							userIsInCoolDown[username.toLowerCase()] = true;
+							setTimeout(resetSongCoolDown,SongCooldown*1000,songIndex);
+							setTimeout(resetUserCoolDown,UserCooldown*1000,username);
+						}
 						http.get("http://127.0.0.1:8888/default/?cmd=QueueItems&param1="+(songIndex),function(res){
 							client.say(channel, 'I found something for you: "'+songs[songIndex]+'" FeelsGoodMan');
 						});
@@ -183,7 +186,7 @@ function checkNowPlaying() {
 				console.log(" ");
 				console.log(" > New song: " + songCurrent[0] + " - " + songCurrent[1]);
 				console.log(" ");
-				songPrevious = songCurrentP;				
+				songPrevious = songCurrentP;
 			}
 		}
 	})
