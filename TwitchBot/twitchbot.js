@@ -81,7 +81,7 @@ setTimeout(function(){
 		if (message.indexOf("!ping")==0) {
 			client.say(channel, "pong!");
 		// COMMAND: !currentsong
-		} else if (message.indexOf("!currentsong")==0 || message.indexOf("!currenttrack")==0 || message.indexOf("!nowplaying") || message.indexOf("!song")==0) {
+		} else if (message.indexOf("!currentsong")==0 || message.indexOf("!currenttrack")==0 || message.indexOf("!nowplaying")==0 || message.indexOf("!song")==0) {
 			request({
 				url: "http://127.0.0.1:8888/playlistviewer/?param3=nowPlaying.json",
 				json: true
