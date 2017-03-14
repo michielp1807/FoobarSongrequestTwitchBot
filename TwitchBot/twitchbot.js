@@ -74,6 +74,7 @@ setTimeout(function(){
 	var client = new tmi.client(options);
 	client.connect();
 	client.on("chat", function(channel, user, message, self) { // on message
+		if (self) return;
 		var username = user["display-name"];
 		message = message.toLowerCase();
 		
@@ -101,7 +102,11 @@ setTimeout(function(){
 		// COMMAND: !previoussong
 		} else if (message.indexOf("!previoussong")==0 || message.indexOf("!previoustrack")==0) {
 			if (songPrevious[0].length>1 && songPrevious[1].length>1) {
-				client.say(channel, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
+				if (songPrevious[0]=="?") {
+					client.say(channel, 'Previous song: "' + songPrevious[1] + '"');
+				} else {
+					client.say(channel, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
+				}
 			} else {
 				client.say(channel, "I can't remember the previous song... FeelsBadMan");
 			}
@@ -174,6 +179,53 @@ setTimeout(function(){
 				}
 			}
 		} 
+	});
+	client.on("whisper", function (from, userstate, message, self) {
+		if (self) return;
+		// COMMAND: !currentsong
+		if (message.indexOf("!currentsong")==0 || message.indexOf("!currenttrack")==0 || message.indexOf("!nowplaying")==0 || (message.indexOf("!song")==0 && message.indexOf("!songrequest")==-1)) {
+			request({
+				url: "http://127.0.0.1:8888/playlistviewer/?param3=nowPlaying.json",
+				json: true
+			}, function (error, response, body) {
+				if (!error && response.statusCode === 200) {
+					if (body.isPlaying == 1) {
+						if (songCurrent[0]=="?") {
+							client.whisper(from, 'Current song: "' + songCurrent[1] + '"');
+						} else {
+							client.whisper(from, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
+						}
+					} else {
+						client.whisper(from, "No music playing... FeelsBadMan");
+					}
+				}
+			})
+		// COMMAND: !previoussong
+		} else if (message.indexOf("!previoussong")==0 || message.indexOf("!previoustrack")==0) {
+			if (songPrevious[0].length>1 && songPrevious[1].length>1) {
+				if (songPrevious[0]=="?") {
+					client.whisper(from, 'Previous song: "' + songPrevious[1] + '"');
+				} else {
+					client.whisper(from, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
+				}
+			} else {
+				client.whisper(from, "I can't remember the previous song... FeelsBadMan");
+			}
+		// COMMAND: !queuelength
+		} else if (message.indexOf("!queuelength")==0) {
+			request({
+				url: "http://127.0.0.1:8888/playlistviewer/?param3=nowPlaying.json",
+				json: true
+			}, function (error, response, body) {
+				if (!error && response.statusCode === 200) {
+					if (body.queueLength == "") {
+						client.whisper(from, 'The queue is currently empty');
+					} else {
+						client.whisper(from, 'The playback queue is ' + body.queueLength + ' long');
+					}
+				}
+			})
+		}
 	});
 },1000);
 
