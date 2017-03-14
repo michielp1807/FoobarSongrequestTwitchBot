@@ -1,7 +1,7 @@
-﻿# MichielP1807’s Foobar Songrequest Twitch Bot
+# MichielP1807’s Foobar Songrequest Twitch Bot
 A Twitch bot that lets people from Twitch chat request songs from your Foobar2000 playlist.
 
-##Needed for this bot:
+## Needed for this bot:
 
 * [foobar2000](http://www.foobar2000.org/download "Download foobar2000")
 
@@ -11,25 +11,25 @@ A Twitch bot that lets people from Twitch chat request songs from your Foobar200
   
 * [The two folders in this repository](https://github.com/MichielP1807/FoobarSongrequestTwitchBot/archive/master.zip "Download this repository")
 
-##Commands:
+## Commands:
 
 * !songrequest [search query] - request songs from the Foobar2000 playlist
 
-* !currentsong - bot will post the artist and title of the currently playing song in chat
+* !currentsong - bot will post the artist and title of the currently playing song in chat (works via whispers as well)
 
-* !previoussong - bot will post the artist and title of the previous song in chat
+* !previoussong - bot will post the artist and title of the previous song in chat (works via whispers as well)
 
-* !queuelength - bot will post the length of the playback queue in chat
+* !queuelength - bot will post the length of the playback queue in chat (works via whispers as well)
 
 * !ping - bot responds with pong! to verify it is working
 
-##Features:
+## Features:
 
 * Cooldowns for individual songs and for individual users
 
 * Automatically save requests that aren't in your playlist to a text file
 
-##How to setup: 
+## How to setup: 
 
 ####  1. Setting up foobar2000
   
