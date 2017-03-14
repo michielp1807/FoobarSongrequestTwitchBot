@@ -88,7 +88,11 @@ setTimeout(function(){
 			}, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					if (body.isPlaying == 1) {
-						client.say(channel, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
+						if (songCurrent[0]=="?") {
+							client.say(channel, 'Current song: "' + songCurrent[1] + '"');
+						} else {
+							client.say(channel, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
+						}
 					} else {
 						client.say(channel, "No music playing... FeelsBadMan");
 					}
