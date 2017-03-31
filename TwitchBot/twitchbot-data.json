@@ -3,5 +3,6 @@
 	"password":"oauth:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 	"joinChannel":"CHANNEL_NAME_TO_GO_TO",
 	"songCooldown":"600",
-	"userCooldown":"30"
+	"userCooldown":"30",
+	"autoUpdate":"1"
 }

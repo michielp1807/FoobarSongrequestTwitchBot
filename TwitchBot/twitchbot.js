@@ -9,6 +9,9 @@ var UserCooldown = 30;
 var songIsInCoolDown = [];
 var userIsInCoolDown = {};
 
+var messageCounter = 0;
+var maxMessagesPerSecond = 10;
+
 console.log(" > Running Server");
 console.log(' ');
 
@@ -80,7 +83,7 @@ setTimeout(function(){
 		
 		// COMMAND: !ping
 		if (message.indexOf("!ping")==0) {
-			client.say(channel, "pong!");
+			sendMessage(client, channel, "pong!");
 		// COMMAND: !currentsong
 		} else if (message.indexOf("!currentsong")==0 || message.indexOf("!currenttrack")==0 || message.indexOf("!nowplaying")==0 || (message.indexOf("!song")==0 && message.indexOf("!songrequest")==-1)) {
 			request({
@@ -90,12 +93,12 @@ setTimeout(function(){
 				if (!error && response.statusCode === 200) {
 					if (body.isPlaying == 1) {
 						if (songCurrent[0]=="?") {
-							client.say(channel, 'Current song: "' + songCurrent[1] + '"');
+							sendMessage(client, channel, 'Current song: "' + songCurrent[1] + '"');
 						} else {
-							client.say(channel, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
+							sendMessage(client, channel, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
 						}
 					} else {
-						client.say(channel, "No music playing... FeelsBadMan");
+						sendMessage(client, channel, "No music playing... FeelsBadMan");
 					}
 				}
 			})
@@ -103,12 +106,12 @@ setTimeout(function(){
 		} else if (message.indexOf("!previoussong")==0 || message.indexOf("!previoustrack")==0) {
 			if (songPrevious[0].length>1 && songPrevious[1].length>1) {
 				if (songPrevious[0]=="?") {
-					client.say(channel, 'Previous song: "' + songPrevious[1] + '"');
+					sendMessage(client, channel, 'Previous song: "' + songPrevious[1] + '"');
 				} else {
-					client.say(channel, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
+					sendMessage(client, channel, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
 				}
 			} else {
-				client.say(channel, "I can't remember the previous song... FeelsBadMan");
+				sendMessage(client, channel, "I can't remember the previous song... FeelsBadMan");
 			}
 		// COMMAND: !queuelength
 		} else if (message.indexOf("!queuelength")==0) {
@@ -118,9 +121,9 @@ setTimeout(function(){
 			}, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					if (body.queueLength == "") {
-						client.say(channel, 'The queue is currently empty');
+						sendMessage(client, channel, 'The queue is currently empty');
 					} else {
-						client.say(channel, 'The playback queue is ' + body.queueLength + ' long');
+						sendMessage(client, channel, 'The playback queue is ' + body.queueLength + ' long');
 					}
 				}
 			})
@@ -131,7 +134,7 @@ setTimeout(function(){
 			var songPossible = [];
 			var songIndex = -1;
 			if (songWord.length == 0 || message.substring(13) == false || message.substring(13)=="***" || message.indexOf("!songrequest ")!=0) {
-				client.say(channel, 'Request songs from the playlist by typing !songrequest + a search query!');
+				sendMessage(client, channel, 'Request songs from the playlist by typing !songrequest + a search query!');
 			} else {
 				for (i = 0; i < songs.length; i++) {
 					var active = true;
@@ -159,9 +162,9 @@ setTimeout(function(){
 				}
 				if (songPossible.length > 0) {
 					if (songIsInCoolDown[songIndex] === true) {
-						client.say(channel, 'The song "'+songs[songIndex]+'" is on a cooldown... FeelsBadMan');
+						sendMessage(client, channel, 'The song "'+songs[songIndex]+'" is on a cooldown... FeelsBadMan');
 					} else if (userIsInCoolDown[username.toLowerCase()] === true) {
-						client.say(channel, 'You can only request a song every ' + UserCooldown + ' seconds ... FeelsBadMan');
+						sendMessage(client, channel, 'You can only request a song every ' + UserCooldown + ' seconds ... FeelsBadMan');
 					} else {
 						if (username.toLowerCase != channel) {
 							songIsInCoolDown[songIndex] = true;
@@ -170,11 +173,11 @@ setTimeout(function(){
 							setTimeout(resetUserCoolDown,UserCooldown*1000,username);
 						}
 						http.get("http://127.0.0.1:8888/default/?cmd=QueueItems&param1="+(songIndex),function(res){
-							client.say(channel, 'I found something for you: "'+songs[songIndex]+'" FeelsGoodMan');
+							sendMessage(client, channel, 'I found something for you: "'+songs[songIndex]+'" FeelsGoodMan');
 						});
 					}
 				} else {
-					client.say(channel, "I didn't find anything FeelsBadMan");
+					sendMessage(client, channel, "I didn't find anything FeelsBadMan");
 					fs.appendFile('failedSongs.txt',  "\r\n [" + username + "] " + message.substring(13), function (err) {});
 				}
 			}
@@ -191,12 +194,12 @@ setTimeout(function(){
 				if (!error && response.statusCode === 200) {
 					if (body.isPlaying == 1) {
 						if (songCurrent[0]=="?") {
-							client.whisper(from, 'Current song: "' + songCurrent[1] + '"');
+							sendWhisper(client, from, 'Current song: "' + songCurrent[1] + '"');
 						} else {
-							client.whisper(from, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
+							sendWhisper(client, from, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
 						}
 					} else {
-						client.whisper(from, "No music playing... FeelsBadMan");
+						sendWhisper(client, from, "No music playing... FeelsBadMan");
 					}
 				}
 			})
@@ -204,12 +207,12 @@ setTimeout(function(){
 		} else if (message.indexOf("!previoussong")==0 || message.indexOf("!previoustrack")==0) {
 			if (songPrevious[0].length>1 && songPrevious[1].length>1) {
 				if (songPrevious[0]=="?") {
-					client.whisper(from, 'Previous song: "' + songPrevious[1] + '"');
+					sendWhisper(client, from, 'Previous song: "' + songPrevious[1] + '"');
 				} else {
-					client.whisper(from, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
+					sendWhisper(client, from, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
 				}
 			} else {
-				client.whisper(from, "I can't remember the previous song... FeelsBadMan");
+				sendWhisper(client, from, "I can't remember the previous song... FeelsBadMan");
 			}
 		// COMMAND: !queuelength
 		} else if (message.indexOf("!queuelength")==0) {
@@ -219,9 +222,9 @@ setTimeout(function(){
 			}, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					if (body.queueLength == "") {
-						client.whisper(from, 'The queue is currently empty');
+						sendWhisper(client, from, 'The queue is currently empty');
 					} else {
-						client.whisper(from, 'The playback queue is ' + body.queueLength + ' long');
+						sendWhisper(client, from, 'The playback queue is ' + body.queueLength + ' long');
 					}
 				}
 			})
@@ -261,4 +264,28 @@ function resetUserCoolDown(username) {
 	console.log("Reset cooldown for " + username);
 	console.log(" ");
 	userIsInCoolDown[username.toLowerCase()] = false;
+}
+
+function sendMessage(client, channel, message) {
+	if (messageCounter<maxMessagesPerSecond) {
+		messageCounter++;
+		client.say(channel, message);
+		setTimeout(resetMessageCounter, 1000);
+	} else {
+		setTimeout(sendMessage, 100, client, channel, message);
+	}
+}
+
+function sendWhisper(client, person, message) {
+	if (messageCounter<maxMessagesPerSecond) {
+		messageCounter++;
+		client.whisper(person, message);
+		setTimeout(resetMessageCounter, 1000);
+	} else {
+		setTimeout(sendWhisper, 100, client, person, message);
+	}
+}
+
+function resetMessageCounter() {
+	messageCounter--;
 }

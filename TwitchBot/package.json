@@ -2,7 +2,7 @@
   "name": "songrequesttwitchbot",
   "version": "1.0.0",
   "description": "a twitchbot that does foobar songrequests",
-  "main": "twitchbot.js",
+  "main": "twitchbot-starter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
