@@ -43,7 +43,7 @@ var request = require("request");
 request({
     url: "http://127.0.0.1:8888/playlistviewer/?param3=playlist.json",
     json: true
-}, function (error, response, body) { 
+}, function (error, response, body) {
     if (!error && response.statusCode === 200) {
 		playlistFromHttp = body;
     }
@@ -53,7 +53,7 @@ setTimeout(function(){
 	songs = songs.concat(playlistFromHttp.split("</br>"));
 	for(var i=0; i<songs.length; i++) {
 		if (songs[i].indexOf('">')!=-1) {
-			songs[i] = songs[i].split('">')[1];		
+			songs[i] = songs[i].split('">')[1].replace(/[\'\"]/g,"");
 			console.log(songs[i]);
 		}
 	}
@@ -80,7 +80,7 @@ setTimeout(function(){
 		if (self) return;
 		var username = user["display-name"];
 		message = message.toLowerCase();
-		
+
 		// COMMAND: !ping
 		if (message.indexOf("!ping")==0) {
 			sendMessage(client, channel, "pong!");
@@ -93,12 +93,12 @@ setTimeout(function(){
 				if (!error && response.statusCode === 200) {
 					if (body.isPlaying == 1) {
 						if (songCurrent[0]=="?") {
-							sendMessage(client, channel, 'Current song: "' + songCurrent[1] + '"');
+							sendMessage(client, channel, 'Current song: "' + songCurrent[1] + '"! @' + username);
 						} else {
-							sendMessage(client, channel, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
+							sendMessage(client, channel, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0] + '! @' + username);
 						}
 					} else {
-						sendMessage(client, channel, "No music playing... FeelsBadMan");
+						sendMessage(client, channel, "No music playing... FeelsBadMan @" + username);
 					}
 				}
 			})
@@ -106,12 +106,12 @@ setTimeout(function(){
 		} else if (message.indexOf("!previoussong")==0 || message.indexOf("!previoustrack")==0) {
 			if (songPrevious[0].length>1 && songPrevious[1].length>1) {
 				if (songPrevious[0]=="?") {
-					sendMessage(client, channel, 'Previous song: "' + songPrevious[1] + '"');
+					sendMessage(client, channel, 'Previous song: "' + songPrevious[1] + '"! @' + username);
 				} else {
-					sendMessage(client, channel, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
+					sendMessage(client, channel, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0] + '! @' + username);
 				}
 			} else {
-				sendMessage(client, channel, "I can't remember the previous song... FeelsBadMan");
+				sendMessage(client, channel, "I can't remember the previous song... FeelsBadMan @" + username);
 			}
 		// COMMAND: !queuelength
 		} else if (message.indexOf("!queuelength")==0) {
@@ -121,9 +121,9 @@ setTimeout(function(){
 			}, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					if (body.queueLength == "") {
-						sendMessage(client, channel, 'The queue is currently empty');
+						sendMessage(client, channel, 'The queue is currently empty. @' + username);
 					} else {
-						sendMessage(client, channel, 'The playback queue is ' + body.queueLength + ' long');
+						sendMessage(client, channel, 'The playback queue is ' + body.queueLength + ' long. @' + username);
 					}
 				}
 			})
@@ -131,15 +131,18 @@ setTimeout(function(){
 		} else if (message.indexOf("!songrequest")==0 || message.indexOf("!sq")==0) {
 			var songWord = message.split(" ");;
 			songWord.shift(); // remove the command name
+      for (i = 0; i < songWord.length; i++) {
+        songWord[i] = songWord[i].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\'\"]/g,"").toLowerCase(); // remove interpunction
+      }
 			var songPossible = [];
 			var songIndex = -1;
 			if (songWord.length == 0 || message.substring(13) == false || message.substring(13)=="***" || message.indexOf("!songrequest ")!=0) {
-				sendMessage(client, channel, 'Request songs from the playlist by typing !songrequest + a search query!');
+				sendMessage(client, channel, 'Request songs from the playlist by typing !songrequest + something to search for! @' + username);
 			} else {
 				for (i = 0; i < songs.length; i++) {
 					var active = true;
 					for (j = 0; j < songWord.length; j++) {
-						if (songs[i].toLowerCase().indexOf(songWord[j].toLowerCase())==-1 && songWord[j]!="***") active=false;
+						if (songs[i].toLowerCase().indexOf(songWord[j])==-1 && songWord[j]!="***") active=false;
 					}
 					if (active) {
 						songPossible.push(i);
@@ -162,9 +165,9 @@ setTimeout(function(){
 				}
 				if (songPossible.length > 0) {
 					if (songIsInCoolDown[songIndex] === true) {
-						sendMessage(client, channel, 'The song "'+songs[songIndex]+'" is on a cooldown... FeelsBadMan');
+						sendMessage(client, channel, 'The song "'+songs[songIndex]+'" is on a cooldown... FeelsBadMan @' + username);
 					} else if (userIsInCoolDown[username.toLowerCase()] === true) {
-						sendMessage(client, channel, 'You can only request a song every ' + UserCooldown + ' seconds ... FeelsBadMan');
+						sendMessage(client, channel, 'You can only request a song every ' + userCooldown + ' seconds... FeelsBadMan @' + username);
 					} else {
 						if (username.toLowerCase != channel) {
 							songIsInCoolDown[songIndex] = true;
@@ -173,15 +176,15 @@ setTimeout(function(){
 							setTimeout(resetUserCoolDown,UserCooldown*1000,username);
 						}
 						http.get("http://127.0.0.1:8888/default/?cmd=QueueItems&param1="+(songIndex),function(res){
-							sendMessage(client, channel, 'I found something for you: "'+songs[songIndex]+'" FeelsGoodMan');
+							sendMessage(client, channel, 'I found something for you: "'+songs[songIndex]+'" FeelsGoodMan @' + username);
 						});
 					}
 				} else {
-					sendMessage(client, channel, "I didn't find anything FeelsBadMan");
+					sendMessage(client, channel, "I didn't find anything... FeelsBadMan @" + username);
 					fs.appendFile('failedSongs.txt',  "\r\n [" + username + "] " + message.substring(13), function (err) {});
 				}
 			}
-		} 
+		}
 	});
 	client.on("whisper", function (from, userstate, message, self) {
 		if (self) return;
@@ -194,9 +197,9 @@ setTimeout(function(){
 				if (!error && response.statusCode === 200) {
 					if (body.isPlaying == 1) {
 						if (songCurrent[0]=="?") {
-							sendWhisper(client, from, 'Current song: "' + songCurrent[1] + '"');
+							sendWhisper(client, from, 'Current song: "' + songCurrent[1] + '"!');
 						} else {
-							sendWhisper(client, from, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0]);
+							sendWhisper(client, from, 'Current song: "' + songCurrent[1] + '" by ' + songCurrent[0] + '!');
 						}
 					} else {
 						sendWhisper(client, from, "No music playing... FeelsBadMan");
@@ -207,9 +210,9 @@ setTimeout(function(){
 		} else if (message.indexOf("!previoussong")==0 || message.indexOf("!previoustrack")==0) {
 			if (songPrevious[0].length>1 && songPrevious[1].length>1) {
 				if (songPrevious[0]=="?") {
-					sendWhisper(client, from, 'Previous song: "' + songPrevious[1] + '"');
+					sendWhisper(client, from, 'Previous song: "' + songPrevious[1] + '"!');
 				} else {
-					sendWhisper(client, from, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0]);
+					sendWhisper(client, from, 'Previous song: "' + songPrevious[1] + '" by ' + songPrevious[0] + '!');
 				}
 			} else {
 				sendWhisper(client, from, "I can't remember the previous song... FeelsBadMan");
@@ -222,9 +225,9 @@ setTimeout(function(){
 			}, function (error, response, body) {
 				if (!error && response.statusCode === 200) {
 					if (body.queueLength == "") {
-						sendWhisper(client, from, 'The queue is currently empty');
+						sendWhisper(client, from, 'The queue is currently empty.');
 					} else {
-						sendWhisper(client, from, 'The playback queue is ' + body.queueLength + ' long');
+						sendWhisper(client, from, 'The playback queue is ' + body.queueLength + ' long.');
 					}
 				}
 			})
